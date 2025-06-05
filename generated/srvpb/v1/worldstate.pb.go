@@ -310,8 +310,8 @@ const file_srvpb_v1_worldstate_proto_rawDesc = "" +
 	"worldstate\"\x0e/v1/worldstate\x12\x87\x01\n" +
 	"\rGetWorldState\x12\x1e.srvpb.v1.GetWorldStateRequest\x1a\x1f.srvpb.v1.GetWorldStateResponse\"5\x92A\f\n" +
 	"\n" +
-	"Worldstate\x82\xd3\xe4\x93\x02 \x12\x1e/v1/worldstate/{worldstate_id}B\xa8\x01\n" +
-	"\fcom.srvpb.v1B\x0fWorldstateProtoP\x01ZFgithub.com/luthersystems/proto-submodule-parent-sandbox/generated/srvpb/v1;v1\xa2\x02\x03SXX\xaa\x02\bSrvpb.V1\xca\x02\bSrvpb\\V1\xe2\x02\x14Srvpb\\V1\\GPBMetadata\xea\x02\tSrvpb::V1b\x06proto3"
+	"Worldstate\x82\xd3\xe4\x93\x02 \x12\x1e/v1/worldstate/{worldstate_id}B\xaf\x01\n" +
+	"\fcom.srvpb.v1B\x0fWorldstateProtoP\x01ZMgithub.com/luthersystems/proto-submodule-parent-sandbox/generated/srvpb/v1;v1\xa2\x02\x03SXX\xaa\x02\bSrvpb.V1\xca\x02\bSrvpb\\V1\xe2\x02\x14Srvpb\\V1\\GPBMetadata\xea\x02\tSrvpb::V1b\x06proto3"
 
 var (
 	file_srvpb_v1_worldstate_proto_rawDescOnce sync.Once

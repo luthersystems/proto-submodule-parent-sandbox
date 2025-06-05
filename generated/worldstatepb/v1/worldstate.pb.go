@@ -73,8 +73,8 @@ const file_worldstatepb_v1_worldstate_proto_rawDesc = "" +
 	" worldstatepb/v1/worldstate.proto\x12\x0fworldstatepb.v1\x1a\x1aweatherpb/v1/weather.proto\"W\n" +
 	"\n" +
 	"WorldState\x12I\n" +
-	"\x0fcurrent_weather\x18\x01 \x01(\v2 .weatherpb.v1.GetWeatherResponseR\x0ecurrentWeatherB\xd2\x01\n" +
-	"\x13com.worldstatepb.v1B\x0fWorldstateProtoP\x01ZMgithub.com/luthersystems/proto-submodule-parent-sandbox/generated/worldstatepb/v1;v1\xa2\x02\x03WXX\xaa\x02\x0fWorldstatepb.V1\xca\x02\x0fWorldstatepb\\V1\xe2\x02\x1bWorldstatepb\\V1\\GPBMetadata\xea\x02\x10Worldstatepb::V1b\x06proto3"
+	"\x0fcurrent_weather\x18\x01 \x01(\v2 .weatherpb.v1.GetWeatherResponseR\x0ecurrentWeatherB\xd9\x01\n" +
+	"\x13com.worldstatepb.v1B\x0fWorldstateProtoP\x01ZTgithub.com/luthersystems/proto-submodule-parent-sandbox/generated/worldstatepb/v1;v1\xa2\x02\x03WXX\xaa\x02\x0fWorldstatepb.V1\xca\x02\x0fWorldstatepb\\V1\xe2\x02\x1bWorldstatepb\\V1\\GPBMetadata\xea\x02\x10Worldstatepb::V1b\x06proto3"
 
 var (
 	file_worldstatepb_v1_worldstate_proto_rawDescOnce sync.Once
