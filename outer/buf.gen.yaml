@@ -30,4 +30,4 @@ plugins:
 inputs:
   # Specify the root directories containing your .proto files
   - directory: api
-  - directory: submodules/weather/api
+  # - directory: submodules/weather/api
