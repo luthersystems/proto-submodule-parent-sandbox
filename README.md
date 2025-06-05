@@ -29,39 +29,42 @@ Each submodule can define its own buf.yaml and buf.gen.yaml, allowing for indepe
 ## Repository structure
 
 ```
-├── common.config.mk                        # Add some decription here
-├── common.mk                               # Add some decription here
+.
+├── api
+│   ├── srvpb
+│   │   └── v1
+│   │       └── worldstate.proto
+│   └── worldstatepb
+│       └── v1
+│           └── worldstate.proto
+├── buf.gen.yaml
+├── buf.lock
+├── buf.yaml
+├── common.config.mk
+├── common.mk
 ├── go.mod
 ├── go.sum
-├-- Outer
-    |
-    ├── api
-    │   ├── pb
-    │   │   └── v1
-    │   │       └── worldstate.proto       # Shared message definitions
-    │   └── srvpb
-    │       └── v1
-    │           └── worldstate.proto       # Worldstate gRPC + HTTP API definitions
-    ├── buf.gen.yaml                       # Code generation config
-    ├── buf.yaml                           # Buf workspace + module config
-    ├── Makefile                           # Makefile making use of Luther BuildEnv      
-    ├── submodules
-    │   └── weather
-    │       ├── api
-    │       │   └── pb
-    │       │       └── v1
-    │       │           └── weather.proto  # Weather service definitions
-    │       ├── buf.gen.yaml               # Submodule codegen config (optional override)
-    │       ├── buf.yaml                   # Submodule module config
-    │       ├── go.mod                     # Optional Go module for submodule consumer
-    │       └── go.sum
-
+├── Makefile
+├── README.md
+└── submodules
+    └── weather              
+        ├── api
+        │   └── weatherpb
+        │       └── v1
+        │           └── weather.proto
+        ├── buf.gen.yaml
+        ├── buf.lock
+        ├── buf.yaml
+        ├── common.config.mk
+        ├── common.mk
+        ├── go.mod
+        ├── go.sum
+        └── Makefile
 ```
 
 ## Building
 
 ```
-cd outer
 make
 ```
 
@@ -77,6 +80,7 @@ version: v2
 modules:
   - path: api
     name: buf.build/acme/worldstate
+
   - path: submodules/weather/api
     name: buf.build/acme/weather
 
@@ -148,13 +152,13 @@ Located at:
 `api/pb/v1/worldstate.proto`
 
 ```
-package pb.v1;
-option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/worldstatepb/v1;v1";
+package worldstatepb.v1;
+option go_package = "github.com/luthersystems/proto-submodule-parent-sandbox/generated/worldstatepb/v1;v1";
 ```
 
 
 → Package name for protobuf = pb.v1
-→ Go package = v1 (files generated to: ./generated/worldstatepb/v1/)
+→ Go package = v1 (files generated to: `./generated/worldstatepb/v1/`)
 
 
 #### `srvpb/worldstate.proto — service definition
@@ -165,13 +169,13 @@ Located at:
 
 ```
 package srvpb.v1;
-option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/srvpb/v1;v1";
+option go_package = "github.com/luthersystems/proto-submodule-parent-sandbox/generated/srvpb/v1;v1";
 import "pb/v1/worldstate.proto";
 ```
 
 → Depends on shared message types via import paths above
 → Protoc resolves this import relative to the declared inputs: in buf.gen.yaml (i.e. api/).
-→ Generated output: ./generated/srvpb/v1/*.pb.go
+→ Generated output: `./api//generated/srvpb/v1/*.pb.go`
 
 #### `weather.proto` — weather submodule
 
@@ -181,89 +185,39 @@ Located at:
 
 ```
 package pb.v1;
-option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/weatherpb/v1;v1";
+option go_package = "github.com/luthersystems/proto-submodule-nested-sandbox/generated/weatherpb/v1;v1";
 ```
 
 → Similarly defines its own package weatherpb.v1 
-→ Generated output: ./generated/weatherpb/v1/*.pb.go
+→ Generated output: `.submodules/weather/generated/weatherpb/v1/*.pb.go`
 
+## Using the child module
 
-## Avoiding Package Name Conflicts
+1. Each submodule defines its own fully qualified option go_package using its own Go module path:
 
-To avoid package name conflicts, it is a good idea to namespace properly. When using a submodule, one or more namespaces may clash e.g. `pb/v1`
+```option go_package = "github.com/luthersystems/proto-submodule-nested-sandbox/generated/weatherpb/v1;weatherpbv1";```
 
-We use:
-```
-opt:
-  - paths=source_relative
-```
+No changes to the child proto files are required by the parent.
 
-as well as
+2. Clone or vendor the submodule repo into the parent's submodules/ directory:
 
 ```
-inputs:
-  # Specify the root directories containing your .proto files
-  - directory: api
-  - directory: submodules/weather/api
+git clone git@github.com:luthersystems/proto-submodule-nested-sandbox.git submodules/weather
 ```
 
-This means:
-
-Generated files follow the same directory structure as the source .proto files.
-The path is calculated relative to the inputs: directories defined in buf.gen.yaml.
-For example:
-
-Proto file: `submodules/weather/api/pb/v1/weather.proto`
-Input root: `submodules/weather/api/`
-Generated output: `generated/pb/v1/weather.pb.go`
-
-To control output paths, ensure your proto files are organized to match the desired package structure.
-
-Suppose that rather than `api/worldstatepb/v1/worldstate.proto` we had `api/pb/v1/worldstate.proto`
-and rather than `submodules/weather/api/weatherpb/v1/weather.proto` we had `submodules/weather/api/pb/v1/weather.proto`
-**So step 1:**
-
-We change `api/pb/v1/worldstate.proto` to `api/worldstatepb/v1/worldstate.proto`
-
-and
-
-`submodules/weather/api/pb/v1/weather.proto` to `submodules/weather/api/weatherpb/v1/weather.proto`
-
-to stop this namespace clash.
-
-**Step 2:**
-
-Update go_package names in proto to match:
-
-`option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/pb/v1;v1";` 
-
-becomes 
-
-`option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/worldstatepb/v1;v1";`
-
-and 
-
-`option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/pb/v1;v1";`
-
-becomes 
-
-`option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/weatherpb/v1;v1";`
-
-**Step 3:**
-
-Update import and package name use. We now use `weatherpb` instead of`pb`:
+3. in `go.mod`, use a replace directive so that the parent module can find the generated go code
 
 ```
-syntax = "proto3";
+module github.com/luthersystems/proto-submodule-sandbox
 
-package worldstatepb.v1;
+go 1.24.3
 
-import "weatherpb/v1/weather.proto";
+replace github.com/luthersystems/proto-submodule-nested-sandbox => ./submodules/weather
 
-option go_package = "github.com/luthersystems/proto-submodule-sandbox/outer/generated/worldstatepb/v1;v1";
-
-message WorldState {
-  weatherpb.v1.GetWeatherResponse current_weather = 1;
-}
-
+require (
+	github.com/luthersystems/proto-submodule-nested-sandbox v0.0.0-00010101000000-000000000000
+	...
+)
 ```
+
+The parent imports submodule protos via standard Buf import paths like import "weatherpb/v1/weather.proto"; — no relative import rewrites required, but generated go code in parent module will be able to resolve the child module using `github.com/luthersystems/proto-submodule-nested-sandbox`.

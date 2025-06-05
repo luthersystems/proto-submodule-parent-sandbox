@@ -1,4 +1,4 @@
-module github.com/luthersystems/proto-submodule-sandbox
+module github.com/luthersystems/proto-submodule-parent-sandbox
 
 go 1.24.3
 
