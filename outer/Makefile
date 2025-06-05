@@ -1,8 +1,8 @@
-PROJECT_REL_DIR=../
+PROJECT_REL_DIR=./
 include ${PROJECT_REL_DIR}common.mk
 
 BUILD_IMAGE_PROJECT_DIR=/go/src/${PROJECT_PATH}
-BUILD_WORKDIR=${BUILD_IMAGE_PROJECT_DIR}/outer
+BUILD_WORKDIR=${BUILD_IMAGE_PROJECT_DIR}
 
 MODULE_DIRS := . submodules/*
 PROTO_SOURCE_FILES := $(foreach dir,$(MODULE_DIRS),$(shell find $(dir) -name '*.proto'))
