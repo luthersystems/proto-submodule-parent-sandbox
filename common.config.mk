@@ -4,7 +4,7 @@ PROJECT=proto-experiment
 VERSION=0.1.0-SNAPSHOT
 
 # Docker image version (using Luther BuildEnv)
-BUILDENV_TAG=a8ebf90345ea3c6a0acc19a6fb0939f3dbe6d64c
+BUILDENV_TAG=v0.0.92
 
 # Build image full name (assuming BUILD_IMAGE_API is still configured somewhere centrally)
 BUILD_IMAGE_API=luthersystems/buildenv-go-proto

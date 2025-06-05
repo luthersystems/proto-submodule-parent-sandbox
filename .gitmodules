@@ -1,0 +1,3 @@
+[submodule "submodules/weather"]
+	path = submodules/weather
+	url = git@github.com:luthersystems/proto-submodule-nested-sandbox.git
