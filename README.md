@@ -33,21 +33,21 @@ Each submodule can define its own buf.yaml and buf.gen.yaml, allowing for indepe
 ├── api
 │   ├── srvpb
 │   │   └── v1
-│   │       └── worldstate.proto
+│   │       └── worldstate.proto         # Shared message definitions
 │   └── worldstatepb
 │       └── v1
-│           └── worldstate.proto
-├── buf.gen.yaml
+│           └── worldstate.proto         # Worldstate gRPC + HTTP API definitions
+├── buf.gen.yaml                         # Code generation config
 ├── buf.lock
-├── buf.yaml
+├── buf.yaml                             # Buf workspace + module config
 ├── common.config.mk
 ├── common.mk
 ├── go.mod
 ├── go.sum
-├── Makefile
+├── Makefile                             # Makefile making use of Luther BuildEnv
 ├── README.md
 └── submodules
-    └── weather              
+    └── weather                          # Weather submodule with similar structure
         ├── api
         │   └── weatherpb
         │       └── v1
