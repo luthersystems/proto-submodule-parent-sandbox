@@ -7,7 +7,7 @@
 package v1
 
 import (
-	v1 "github.com/luthersystems/nested-proto-submodule/generated/weatherpb/v1"
+	v1 "github.com/luthersystems/proto-submodule-nested-sandbox/generated/weatherpb/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
