@@ -4,7 +4,7 @@ include ${PROJECT_REL_DIR}common.mk
 BUILD_IMAGE_PROJECT_DIR=/go/src/${PROJECT_PATH}
 BUILD_WORKDIR=${BUILD_IMAGE_PROJECT_DIR}
 
-MODULE_DIRS := . submodules/*
+MODULE_DIRS := .
 PROTO_SOURCE_FILES := $(foreach dir,$(MODULE_DIRS),$(shell find $(dir) -name '*.proto'))
 PROTO_SOURCE_FILES := $(foreach f,${PROTO_SOURCE_FILES},$(patsubst ./%,%,$(f)))
 
