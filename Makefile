@@ -20,6 +20,8 @@ ${ARTIFACTS}: ${PROTO_SOURCE_FILES}
 		if [ ! -d "$$dir/generated" ]; then \
 			echo "Error: $$dir/generated directory not found."; \
 			echo ""; \
+			echo "generating parent module code DOES NOT generate submodule code."; \
+			echo ""; \
 			echo "Please run 'make' in $$dir first."; \
 			echo ""; \
 			echo "After building the submodule, return here and run make again."; \
