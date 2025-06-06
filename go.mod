@@ -1,7 +1,6 @@
 module github.com/luthersystems/proto-submodule-parent-sandbox
 
 go 1.24.3
-
 replace github.com/luthersystems/proto-submodule-nested-sandbox => ./submodules/weather
 
 require (
