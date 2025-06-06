@@ -2,7 +2,6 @@ PROJECT_REL_DIR=./
 include ${PROJECT_REL_DIR}common.mk
 
 ## IMPORTANT: THIS IS A PARENT DIR. MAKE SURE TO RUN MAKE IN THE SUBMODULES FIRST.
-
 BUILD_IMAGE_PROJECT_DIR=/go/src/${PROJECT_PATH}
 BUILD_WORKDIR=${BUILD_IMAGE_PROJECT_DIR}
 
@@ -17,6 +16,16 @@ ARTIFACTS=${PROTO_FILES}
 
 # build if PROTO_SOURCE_FILES have changed or generated files are missing
 ${ARTIFACTS}: ${PROTO_SOURCE_FILES}
+	@for dir in $(shell find submodules -maxdepth 1 -mindepth 1 -type d); do \
+		if [ ! -d "$$dir/generated" ]; then \
+			echo "Error: $$dir/generated directory not found."; \
+			echo ""; \
+			echo "Please run 'make' in $$dir first."; \
+			echo ""; \
+			echo "After building the submodule, return here and run make again."; \
+			exit 1; \
+		fi \
+	done
 	${DOCKER_RUN} \
 		-u ${DOCKER_USER} \
 		-v ${DOCKER_PROJECT_DIR}:${BUILD_IMAGE_PROJECT_DIR} \
