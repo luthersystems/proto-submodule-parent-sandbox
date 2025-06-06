@@ -1,20 +1,33 @@
 PROJECT_REL_DIR=./
 include ${PROJECT_REL_DIR}common.mk
 
+## IMPORTANT: THIS IS A PARENT DIR. MAKE SURE TO RUN MAKE IN THE SUBMODULES FIRST.
 BUILD_IMAGE_PROJECT_DIR=/go/src/${PROJECT_PATH}
 BUILD_WORKDIR=${BUILD_IMAGE_PROJECT_DIR}
 
-MODULE_DIRS := . submodules/*
-PROTO_SOURCE_FILES := $(foreach dir,$(MODULE_DIRS),$(shell find $(dir) -name '*.proto'))
-PROTO_SOURCE_FILES := $(foreach f,${PROTO_SOURCE_FILES},$(patsubst ./%,%,$(f)))
+# Find proto files in API directory
+PROTO_SOURCE_FILES := $(shell find api -name '*.proto')
+$(info Found proto files: ${PROTO_SOURCE_FILES})
 
-GW_FILES=$(patsubst %.proto,%.pb.gw.go,$(wildcard pb/**/*.proto))
-GRPC_FILES=$(patsubst %.proto,%_grpc.pb.go,$(wildcard pb/**/*.proto))
-PROTO_FILES=$(patsubst %.proto,%.pb.go,$(PROTO_SOURCE_FILES))
-ARTIFACTS=${PROTO_FILES} ${GW_FILES} ${GRPC_FILES}
+# Generate files will be in generated directory
+PROTO_FILES := $(patsubst api/%.proto,generated/%.pb.go,$(PROTO_SOURCE_FILES))
+$(info Will generate: ${PROTO_FILES})
+ARTIFACTS=${PROTO_FILES}
 
+# build if PROTO_SOURCE_FILES have changed or generated files are missing
 ${ARTIFACTS}: ${PROTO_SOURCE_FILES}
-	@echo "Building proto artifacts inside Docker"
+	@for dir in $(shell find submodules -maxdepth 1 -mindepth 1 -type d); do \
+		if [ ! -d "$$dir/generated" ]; then \
+			echo "Error: $$dir/generated directory not found."; \
+			echo ""; \
+			echo "generating parent module code DOES NOT generate submodule code."; \
+			echo ""; \
+			echo "Please run 'make' in $$dir first."; \
+			echo ""; \
+			echo "After building the submodule, return here and run make again."; \
+			exit 1; \
+		fi \
+	done
 	${DOCKER_RUN} \
 		-u ${DOCKER_USER} \
 		-v ${DOCKER_PROJECT_DIR}:${BUILD_IMAGE_PROJECT_DIR} \
