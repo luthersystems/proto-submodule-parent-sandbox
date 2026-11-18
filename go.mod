@@ -1,6 +1,7 @@
 module github.com/luthersystems/proto-submodule-parent-sandbox
 
-go 1.24.3
+go 1.25.0
+
 replace github.com/luthersystems/proto-submodule-nested-sandbox => ./submodules/weather
 
 require (
@@ -12,9 +13,9 @@ require (
 )
 
 require (
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 	google.golang.org/genproto v0.0.0-20250404141209-ee84b53bf3d0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250528174236-200df99c418a // indirect
 )
